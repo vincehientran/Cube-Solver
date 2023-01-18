@@ -1,5 +1,32 @@
 import numpy as np
 
+class bcolors:
+    BLUE = '\033[1;34m'
+    CYAN = '\033[1;36m'
+    GREEN = '\033[1;32m'
+    RED = '\033[1;31m'
+    YELLOW = '\033[1;33m'
+    MAGENTA = '\033[1;35m'
+
+    BLUE_HIGHLIGHT = '\033[0;34;44m'
+    CYAN_HIGHLIGHT = '\033[0;36;46m'
+    GREEN_HIGHLIGHT = '\033[0;32;42m'
+    RED_HIGHLIGHT = '\033[0;31;41m'
+    YELLOW_HIGHLIGHT = '\033[0;33;43m'
+    MAGENTA_HIGHLIGHT = '\033[0;35;45m'
+
+    BLUE_UNDERLINE = '\033[4;34m'
+    CYAN_UNDERLINE = '\033[4;36m'
+    GREEN_UNDERLINE = '\033[4;32m'
+    RED_UNDERLINE = '\033[4;31m'
+    YELLOW_UNDERLINE = '\033[4;33m'
+    MAGENTA_UNDERLINE = '\033[4;35m'
+
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+    HIGHLIGHT = '\033[0;37;47m'
+
 class Cube(object):
     def __init__(self, state=None):
         if not state:
@@ -211,6 +238,18 @@ class Cube(object):
         face[2][1] = face[1][0]
         face[1][0] = topMiddle
 
+    def convertMoveNumToStr(self, num):
+        d = {1:'U', 2:'U\'', 3:'D', 4:'D\'',
+        5:'F', 6:'F\'', 7:'B', 8:'B\'',
+        9:'L', 10:'L\'', 11:'R', 12:'R\''}
+        return d[num]
+
+    def convertMoveStrToNum(self, string):
+        d = {'U':1, 'U\'':2, 'D':3, 'D\'':4,
+        'F':5, 'F\'':6, 'B':7, 'B\'':8,
+        'L':9, 'L\'':10, 'R':11, 'R\'':12}
+        return d[string]
+
     def isSolved(self):
         solved = True
         solved &= self.top == [[1 for _ in range(3)] for _ in range(3)]
@@ -221,48 +260,65 @@ class Cube(object):
         solved &= self.right == [[6 for _ in range(3)] for _ in range(3)]
         return solved
 
+    def stringColor(self, num):
+        if num == 1:
+            return bcolors.HIGHLIGHT + str(1) + ' ' + bcolors.ENDC
+        elif num == 2:
+            return bcolors.YELLOW_HIGHLIGHT + str(2) + ' ' + bcolors.ENDC
+        elif num == 3:
+            return bcolors.MAGENTA_HIGHLIGHT + str(3) + ' ' + bcolors.ENDC
+        elif num == 4:
+            return bcolors.RED_HIGHLIGHT + str(4) + ' ' + bcolors.ENDC
+        elif num == 5:
+            return bcolors.BLUE_HIGHLIGHT + str(5) + ' ' + bcolors.ENDC
+        elif num == 6:
+            return bcolors.GREEN_HIGHLIGHT + str(6) + ' ' + bcolors.ENDC
+        else:
+            return ''
+
+
     def printCube(self):
         string = ''
         for i in range(len(self.top)):
             for _ in range(len(self.top)):
-                    string += ' '
+                    string += '  '
 
             for j in range(len(self.top[i])):
-                string += str(self.top[i][j])
+                string += self.stringColor(self.top[i][j])
 
             for _ in range(len(self.top)):
-                string += ' '
+                string += '  '
             for _ in range(len(self.top[i])):
-                string += ' '
+                string += '  '
 
             string += '\n'
 
         for i in range(len(self.front)):
             for j in range(len(self.left[i])):
-                string += str(self.left[i][j])
+                string += self.stringColor(self.left[i][j])
 
             for j in range(len(self.front[i])):
-                string += str(self.front[i][j])
+                string += self.stringColor(self.front[i][j])
 
             for j in range(len(self.right[i])):
-                string += str(self.right[i][j])
+                string += self.stringColor(self.right[i][j])
 
             for j in range(len(self.back[i])):
-                string += str(self.back[i][j])
+                string += self.stringColor(self.back[i][j])
             
             string += '\n'
 
         for i in range(len(self.bottom)):
             for _ in range(len(self.bottom)):
-                    string += ' '
+                    string += '  '
 
             for j in range(len(self.bottom[i])):
-                string += str(self.bottom[i][j])
+                string += self.stringColor(self.bottom[i][j])
 
             for _ in range(len(self.bottom)):
-                string += ' '
+                string += '  '
             for _ in range(len(self.bottom[i])):
-                string += ' '
+                string += '  '
 
             string += '\n'
 
