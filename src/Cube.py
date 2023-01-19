@@ -250,6 +250,36 @@ class Cube(object):
         'L':9, 'L\'':10, 'R':11, 'R\'':12}
         return d[string]
 
+    def move(self, num):
+        if num == 1:
+            self.rotateTopCW()
+        elif num == 2:
+            self.rotateTopCounterCW()
+        elif num == 3:
+            self.rotateBottomCW()
+        elif num == 4:
+            self.rotateBottomCounterCW()
+        elif num == 5:
+            self.rotateFrontCW()
+        elif num == 6:
+            self.rotateFrontCounterCW()
+        elif num == 7:
+            self.rotateBackCW()
+        elif num == 8:
+            self.rotateBackCounterCW()
+        elif num == 9:
+            self.rotateLeftCW()
+        elif num == 10:
+            self.rotateLeftCounterCW()
+        elif num == 11:
+            self.rotateRightCW()
+        elif num == 12:
+            self.rotateRightCounterCW()
+
+    def moves(self, nums):
+        for num in nums:
+            self.move(num)
+
     def isSolved(self):
         solved = True
         solved &= self.top == [[1 for _ in range(3)] for _ in range(3)]
@@ -259,6 +289,48 @@ class Cube(object):
         solved &= self.left == [[5 for _ in range(3)] for _ in range(3)]
         solved &= self.right == [[6 for _ in range(3)] for _ in range(3)]
         return solved
+
+    def clone(self):
+        newTop = [[num for num in row] for row in self.top]
+        newBottom = [[num for num in row] for row in self.bottom]
+        newFront = [[num for num in row] for row in self.front]
+        newBack = [[num for num in row] for row in self.back]
+        newLeft = [[num for num in row] for row in self.left]
+        newRight = [[num for num in row] for row in self.right]
+        return Cube(state=[newTop, newBottom, newFront, newBack, newLeft, newRight])
+
+    def __eq__(self, other):
+        for i in range(len(self.top)):
+            for j in range(len(self.top[i])):
+                if self.top[i][j] != other.top[i][j]:
+                    return False
+
+        for i in range(len(self.bottom)):
+            for j in range(len(self.bottom[i])):
+                if self.bottom[i][j] != other.bottom[i][j]:
+                    return False
+
+        for i in range(len(self.front)):
+            for j in range(len(self.front[i])):
+                if self.front[i][j] != other.front[i][j]:
+                    return False
+
+        for i in range(len(self.back)):
+            for j in range(len(self.back[i])):
+                if self.back[i][j] != other.back[i][j]:
+                    return False
+
+        for i in range(len(self.left)):
+            for j in range(len(self.left[i])):
+                if self.left[i][j] != other.left[i][j]:
+                    return False
+
+        for i in range(len(self.right)):
+            for j in range(len(self.right[i])):
+                if self.right[i][j] != other.right[i][j]:
+                    return False
+        
+        return True
 
     def stringColor(self, num):
         if num == 1:
@@ -275,7 +347,6 @@ class Cube(object):
             return bcolors.GREEN_HIGHLIGHT + str(6) + ' ' + bcolors.ENDC
         else:
             return ''
-
 
     def printCube(self):
         string = ''
